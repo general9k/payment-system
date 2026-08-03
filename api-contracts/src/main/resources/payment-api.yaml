@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: payment-service API
+  version: 1.0.0
+  description: Оркестрация платежей
+
+servers:
+  - url: http://localhost:8083
+
+tags:
+  - name: payments
+    description: Управление платежами
+
+paths:
+  /api/v1/payments:
+    post:
+      operationId: createPayment
+      summary: Создать платёж
+      tags:
+        - payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentRequest'
+      responses:
+        '201':
+          description: Платёж создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+
+  /api/v1/payments/{paymentId}:
+    get:
+      operationId: getPayment
+      summary: Получить платёж по ID
+      tags:
+        - payments
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Данные платежа
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '404':
+          description: Платёж не найден
+
+components:
+  schemas:
+    CreatePaymentRequest:
+      type: object
+      required:
+        - clientId
+        - sourceAccountId
+        - targetAccountId
+        - amount
+        - currency
+      properties:
+        clientId:
+          type: string
+          format: uuid
+        sourceAccountId:
+          type: string
+          format: uuid
+        targetAccountId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          minimum: 0.0001
+        currency:
+          type: string
+          enum: [RUB, USD, EUR]
+
+    PaymentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        clientId:
+          type: string
+          format: uuid
+        sourceAccountId:
+          type: string
+          format: uuid
+        targetAccountId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+        currency:
+          type: string
+          enum: [RUB, USD, EUR]
+        status:
+          type: string
+          enum: [CREATED, PROCESSING, COMPLETED, FAILED, CANCELLED]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time

@@ -1,0 +1,419 @@
+openapi: 3.0.3
+info:
+  title: account-service API
+  version: 1.0.0
+  description: Управление счетами, балансами и резервированиями средств
+
+servers:
+  - url: http://localhost:8082
+    description: Локальная разработка
+
+tags:
+  - name: accounts
+    description: Управление счетами
+  - name: balance
+    description: Операции с балансом
+  - name: holds
+    description: Резервирования средств
+  - name: transactions
+    description: История операций
+
+paths:
+
+  /api/v1/accounts:
+    post:
+      operationId: createAccount
+      summary: Создать новый счёт
+      tags:
+        - accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccountRequest'
+      responses:
+        '201':
+          description: Счёт создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+        '409':
+          description: Счёт уже существует
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+    get:
+      operationId: getAccountsByClient
+      summary: Получить все счета клиента
+      tags:
+        - accounts
+      parameters:
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Список счетов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+
+  /api/v1/accounts/{accountId}:
+    get:
+      operationId: getAccount
+      summary: Получить счёт по ID
+      tags:
+        - accounts
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Данные счёта
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '404':
+          description: Счёт не найден
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+
+  /api/v1/accounts/{accountId}/balance:
+    patch:
+      operationId: adjustBalance
+      summary: Списание или зачисление средств
+      tags:
+        - balance
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BalanceAdjustRequest'
+      responses:
+        '200':
+          description: Баланс изменён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '404':
+          description: Счёт не найден
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+        '422':
+          description: Недостаточно средств
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+
+  /api/v1/accounts/{accountId}/holds:
+    post:
+      operationId: createHold
+      summary: Заморозить средства на счёте
+      tags:
+        - holds
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateHoldRequest'
+      responses:
+        '201':
+          description: Hold создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HoldResponse'
+        '404':
+          description: Счёт не найден
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+        '422':
+          description: Недостаточно средств для заморозки
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+
+  /api/v1/holds/{holdId}/confirm:
+    patch:
+      operationId: confirmHold
+      summary: Подтвердить hold (списать замороженные средства)
+      tags:
+        - holds
+      parameters:
+        - name: holdId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Hold подтверждён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HoldResponse'
+        '404':
+          description: Hold не найден
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+        '409':
+          description: Hold уже подтверждён или освобождён
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+
+  /api/v1/holds/{holdId}/release:
+    patch:
+      operationId: releaseHold
+      summary: Освободить hold (разморозить средства)
+      tags:
+        - holds
+      parameters:
+        - name: holdId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Hold освобождён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HoldResponse'
+        '404':
+          description: Hold не найден
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+        '409':
+          description: Hold уже подтверждён или освобождён
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+
+  /api/v1/accounts/{accountId}/transactions:
+    get:
+      operationId: getTransactions
+      summary: История операций по счёту
+      tags:
+        - transactions
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Страница транзакций
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionPageResponse'
+        '404':
+          description: Счёт не найден
+          content:
+            application/json:
+              schema:
+                $ref: './common/common.yaml/#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    CreateAccountRequest:
+      type: object
+      required:
+        - clientId
+        - currency
+      properties:
+        clientId:
+          type: string
+          format: uuid
+        currency:
+          $ref: './common/common.yaml/#/components/schemas/CurrencyEnum'
+        initialBalance:
+          type: number
+          default: 0
+
+    AccountResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        clientId:
+          type: string
+          format: uuid
+        currency:
+          $ref: './common/common.yaml/#/components/schemas/CurrencyEnum'
+        balance:
+          type: number
+        status:
+          $ref: './common/common.yaml/#/components/schemas/AccountStatusEnum'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    BalanceAdjustRequest:
+      type: object
+      required:
+        - amount
+        - operationType
+      properties:
+        amount:
+          type: number
+          minimum: 0.0001
+        operationType:
+          $ref: './common/common.yaml/#/components/schemas/OperationTypeEnum'
+        reason:
+          type: string
+          maxLength: 255
+
+    CreateHoldRequest:
+      type: object
+      required:
+        - amount
+        - paymentId
+      properties:
+        amount:
+          type: number
+          minimum: 0.0001
+        paymentId:
+          type: string
+          format: uuid
+        ttlSeconds:
+          type: integer
+          default: 300
+
+    HoldResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        accountId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+        status:
+          $ref: './common/common.yaml/#/components/schemas/HoldStatusEnum'
+        paymentId:
+          type: string
+          format: uuid
+        expiresAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+
+    TransactionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        accountId:
+          type: string
+          format: uuid
+        operationType:
+          $ref: './common/common.yaml/#/components/schemas/OperationTypeEnum'
+        amount:
+          type: number
+        balanceAfter:
+          type: number
+        reason:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    TransactionPageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionResponse'
+        page:
+          type: integer
+        size:
+          type: integer
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer

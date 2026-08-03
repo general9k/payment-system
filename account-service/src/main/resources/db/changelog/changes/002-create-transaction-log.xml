@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="002-create-transaction-log" author="RodionovM">
+
+        <createTable tableName="transaction_log">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="account_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operation_type" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="numeric(19, 4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance_after" type="numeric(19, 4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reason" type="varchar(255)"/>
+            <column name="created_at" type="timestamp" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_transaction_log_account"
+                baseTableName="transaction_log"
+                baseColumnNames="account_id"
+                referencedTableName="accounts"
+                referencedColumnNames="id"
+                onDelete="RESTRICT"/>
+
+        <createIndex indexName="idx_transaction_log_account_created" tableName="transaction_log">
+            <column name="account_id"/>
+            <column name="created_at" descending="true"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

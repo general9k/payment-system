@@ -1,0 +1,115 @@
+openapi: 3.0.3
+info:
+  title: Common models
+  version: 1.0.0
+  description: Общие модели для всех сервисов
+
+paths: { }
+
+components:
+  responses:
+    BadRequest:
+      description: Некорректный запрос
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Не авторизован
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Доступ запрещён
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Ресурс не найден
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: Конфликт (ресурс уже существует)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    UnprocessableEntity:
+      description: Бизнес-ошибка (недостаточно средств и т.п.)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalError:
+      description: Внутренняя ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    AccountStatusEnum:
+      type: string
+      enum:
+        - ACTIVE
+        - BLOCKED
+        - CLOSED
+    CurrencyEnum:
+      type: string
+      enum:
+        - RUB
+        - USD
+        - EUR
+    OperationTypeEnum:
+      type: string
+      enum:
+        - DEBIT
+        - CREDIT
+        - HOLD
+        - RELEASE
+    HoldStatusEnum:
+      type: string
+      enum:
+        - PENDING
+        - CONFIRMED
+        - RELEASED
+        - EXPIRED
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: BAD_REQUEST
+        message:
+          type: string
+          description: Человекочитаемое сообщение
+          example: Счёт с указанным ID не найден
+        timestamp:
+          type: string
+          format: date-time
+        path:
+          type: string
+          description: Путь запроса, в котором произошла ошибка
+          example: /api/v1/accounts/550e8400-e29b-41d4-a716-446655440000
+    ErrorCode:
+      type: integer
+      enum:
+        - 400
+        - 401
+        - 403
+        - 404
+        - 409
+        - 422
+        - 500
+      x-enum-varnames:
+        - BAD_REQUEST
+        - UNAUTHORIZED
+        - FORBIDDEN
+        - NOT_FOUND
+        - CONFLICT
+        - UNPROCESSABLE_ENTITY
+        - INTERNAL_ERROR
