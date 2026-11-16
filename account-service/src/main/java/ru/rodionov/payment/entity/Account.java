@@ -4,41 +4,31 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import ru.rodionov.payment.contract.account.model.AccountStatusEnum;
 import ru.rodionov.payment.contract.account.model.CurrencyEnum;
-import ru.rodionov.payment.converter.AccountStatusEnumConverter;
-import ru.rodionov.payment.converter.CurrencyEnumConverter;
+import ru.rodionov.payment.util.converter.AccountStatusEnumConverter;
+import ru.rodionov.payment.util.converter.CurrencyEnumConverter;
+import ru.rodionov.starter.entity.BaseEntity;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "accounts")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @EntityListeners({AuditingEntityListener.class})
-public class Account {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false, updatable = false)
-    private UUID id;
+public class Account extends BaseEntity {
 
     @Column(name = "client_id", nullable = false)
     private UUID clientId;
@@ -55,12 +45,4 @@ public class Account {
     @Convert(converter = AccountStatusEnumConverter.class)
     @Column(name = "status", nullable = false, length = 20)
     private AccountStatusEnum status = AccountStatusEnum.ACTIVE;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at", nullable = false)
-    private OffsetDateTime updatedAt;
 }

@@ -38,7 +38,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccountResponse'
+                $ref: '#/components/schemas/AccountDTO'
         '400':
           description: Некорректный запрос
           content:
@@ -71,7 +71,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AccountResponse'
+                  $ref: '#/components/schemas/AccountDTO'
         '400':
           description: Некорректный запрос
           content:
@@ -98,7 +98,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccountResponse'
+                $ref: '#/components/schemas/AccountDTO'
         '404':
           description: Счёт не найден
           content:
@@ -131,7 +131,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccountResponse'
+                $ref: '#/components/schemas/AccountDTO'
         '404':
           description: Счёт не найден
           content:
@@ -170,7 +170,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HoldResponse'
+                $ref: '#/components/schemas/HoldDTO'
         '404':
           description: Счёт не найден
           content:
@@ -203,7 +203,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HoldResponse'
+                $ref: '#/components/schemas/HoldDTO'
         '404':
           description: Hold не найден
           content:
@@ -236,7 +236,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HoldResponse'
+                $ref: '#/components/schemas/HoldDTO'
         '404':
           description: Hold не найден
           content:
@@ -304,7 +304,7 @@ components:
           type: number
           default: 0
 
-    AccountResponse:
+    AccountDTO:
       type: object
       properties:
         id:
@@ -357,7 +357,7 @@ components:
           type: integer
           default: 300
 
-    HoldResponse:
+    HoldDTO:
       type: object
       properties:
         id:
@@ -380,7 +380,7 @@ components:
           type: string
           format: date-time
 
-    TransactionResponse:
+    TransactionDTO:
       type: object
       properties:
         id:
@@ -407,13 +407,6 @@ components:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionResponse'
-        page:
-          type: integer
-        size:
-          type: integer
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
+            $ref: '#/components/schemas/TransactionDTO'
+        paginationInfo:
+          $ref: './common/common.yaml/#/components/schemas/PageInfo'

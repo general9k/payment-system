@@ -4,26 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95142007-9783-4f2d-81cb-746a8d3470c9" name="Changes" comment="first">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-contracts.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-contracts/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/starter/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="95142007-9783-4f2d-81cb-746a8d3470c9" name="Changes" comment="add starter + open api">
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/AccountApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/AccountApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/controller/AccountController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/controller/BalanceController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/controller/HoldController.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/controller/HoldController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/controller/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/controller/TransactionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/converter/AccountStatusEnumConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/util/converter/AccountStatusEnumConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/converter/CurrencyEnumConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/util/converter/CurrencyEnumConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/converter/HoldStatusEnumConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/util/converter/HoldStatusEnumConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/converter/OperationTypeEnumConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/util/converter/OperationTypeEnumConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/entity/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/entity/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/entity/Hold.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/entity/Hold.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/entity/TransactionLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/entity/TransactionLog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/mapper/AccountMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/mapper/AccountMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/repository/AccountRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/repository/HoldRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/repository/HoldRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/repository/TransactionLogRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/repository/TransactionLogRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/service/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/service/HoldService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/ru/rodionov/payment/service/HoldService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/account-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/ru/rodionov/payment/NotificationApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/ru/rodionov/payment/NotificationApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-contracts/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api-contracts/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-contracts/src/main/resources/account-api.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api-contracts/src/main/resources/account-api.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-contracts/src/main/resources/common/common.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api-contracts/src/main/resources/common/common.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/ru/rodionov/payment/PaymentApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/ru/rodionov/payment/PaymentApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/java/ru/rodionov/starter/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/ru/rodionov/starter/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/java/ru/rodionov/starter/exception/LogicException.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/ru/rodionov/starter/exception/LogicBusinessException.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,54 +70,55 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
-    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
-    "Maven.Unknown [compile].executor": "Run",
-    "Maven.account-service [compile].executor": "Run",
-    "Maven.account-service [validate].executor": "Run",
-    "Maven.api-contracts [clean].executor": "Run",
-    "Maven.api-contracts [compile].executor": "Run",
-    "Maven.notification-service [compile].executor": "Run",
-    "Maven.payment-service [clean].executor": "Run",
-    "Maven.payment-service [compile].executor": "Run",
-    "Maven.payment-system [clean].executor": "Run",
-    "Maven.payment-system [compile].executor": "Run",
-    "Maven.starter [clean].executor": "Run",
-    "Maven.starter [compile].executor": "Run",
-    "OpenAPI/Swagger Code Generator.account-api.yaml.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.AccountApplication.executor": "Run",
-    "Spring Boot.Application (1).executor": "Run",
-    "Spring Boot.Application.executor": "Run",
-    "Spring Boot.NotificationApplication.executor": "Run",
-    "Spring Boot.PaymentApplication.executor": "Run",
-    "git-widget-placeholder": "main",
-    "jdk.selected.JAVA_MODULE": "openjdk-21",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/general9k/IdeaProjects/payment-system/account-service/src/main/resources/db/changelog/changes",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.18164062",
-    "project.structure.side.proportion": "0.26678604",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "Settings.JavaScript",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Unknown [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.account-service [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.account-service [validate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.api-contracts [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.api-contracts [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.notification-service [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.payment-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.payment-service [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.payment-system [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.payment-system [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.starter [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.starter [compile].executor&quot;: &quot;Run&quot;,
+    &quot;OpenAPI/Swagger Code Generator.account-api.yaml.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AccountApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.Application (1).executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.Application.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.NotificationApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.PaymentApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-21&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/general9k/IdeaProjects/my/payment-system&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.18164062&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.26678604&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Settings.JavaScript&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/account-service/src/main/resources/db/changelog/changes" />
       <recent name="$PROJECT_DIR$/payment-service/src/main/resources" />
       <recent name="$PROJECT_DIR$/notification-service/src/main/resources" />
@@ -120,6 +131,9 @@
       <recent name="$PROJECT_DIR$/payment-service/src/main/resources/db" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="ru.rodionov.starter.util" />
+      <recent name="ru.rodionov.starter.mapper" />
+      <recent name="ru.rodionov.starter.repository" />
       <recent name="ru.rodionov.payment.config" />
       <recent name="ru.rodionov.payment.util" />
     </key>
@@ -219,6 +233,9 @@
       <workItem from="1785411252281" duration="9600000" />
       <workItem from="1785485036963" duration="3000" />
       <workItem from="1785761073974" duration="7207000" />
+      <workItem from="1788855644222" duration="4000" />
+      <workItem from="1791966440259" duration="14224000" />
+      <workItem from="1791988871540" duration="30000" />
     </task>
     <task id="LOCAL-00001" summary="first">
       <option name="closed" value="true" />

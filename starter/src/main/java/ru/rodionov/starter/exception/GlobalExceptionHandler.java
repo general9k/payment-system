@@ -10,8 +10,8 @@ import ru.rodionov.starter.util.DateUtil;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(LogicException.class)
-    public ResponseEntity<ErrorResponse> handleLogicException(LogicException ex,
+    @ExceptionHandler(LogicBusinessException.class)
+    public ResponseEntity<ErrorResponse> handleLogicException(LogicBusinessException ex,
                                                               HttpServletRequest request) {
         ErrorResponse error = new ErrorResponse()
                 .code(ex.getCode().name())

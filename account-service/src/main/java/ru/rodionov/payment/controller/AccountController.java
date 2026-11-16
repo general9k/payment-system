@@ -5,44 +5,39 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.rodionov.payment.contract.account.api.AccountsApi;
-import ru.rodionov.payment.contract.account.model.AccountResponse;
+import ru.rodionov.payment.contract.account.api.BalanceApi;
+import ru.rodionov.payment.contract.account.model.AccountDTO;
+import ru.rodionov.payment.contract.account.model.BalanceAdjustRequest;
 import ru.rodionov.payment.contract.account.model.CreateAccountRequest;
-import ru.rodionov.payment.entity.Account;
-import ru.rodionov.payment.mapper.AccountMapper;
-import ru.rodionov.payment.service.AccountService;
+import ru.rodionov.payment.facade.AccountFacade;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-public class AccountController implements AccountsApi {
+public class AccountController implements AccountsApi, BalanceApi {
 
-    private final AccountService accountService;
-    private final AccountMapper accountMapper;
+    private final AccountFacade facade;
 
     @Override
-    public ResponseEntity<AccountResponse> createAccount(CreateAccountRequest request) {
-        Account account = accountService.create(request.getClientId(), request.getCurrency(), request.getInitialBalance() != null
-                ? request.getInitialBalance()
-                : BigDecimal.ZERO
-        );
+    public ResponseEntity<AccountDTO> createAccount(CreateAccountRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(accountMapper.toResponse(account));
+                .body(facade.createAccount(request));
     }
 
     @Override
-    public ResponseEntity<List<AccountResponse>> getAccountsByClient(UUID clientId) {
-        List<AccountResponse> accounts = accountService.getByClientId(clientId).stream()
-                .map(accountMapper::toResponse)
-                .toList();
-        return ResponseEntity.ok(accounts);
+    public ResponseEntity<List<AccountDTO>> getAccountsByClient(UUID clientId) {
+        return ResponseEntity.ok(facade.getAccountsByClient(clientId));
     }
 
     @Override
-    public ResponseEntity<AccountResponse> getAccount(UUID accountId) {
-        Account account = accountService.getById(accountId);
-        return ResponseEntity.ok(accountMapper.toResponse(account));
+    public ResponseEntity<AccountDTO> getAccount(UUID accountId) {
+        return ResponseEntity.ok(facade.getAccount(accountId));
+    }
+
+    @Override
+    public ResponseEntity<AccountDTO> adjustBalance(UUID accountId, BalanceAdjustRequest request) {
+        return ResponseEntity.ok(facade.adjustBalance(accountId, request));
     }
 }

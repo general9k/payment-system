@@ -27,7 +27,9 @@ spring:
     change-log: db/changelog/master.yml.xml
 
   kafka:
-    bootstrap-servers: localhost:9092
+    listener:
+      observation-enabled: true
+    bootstrap-servers: localhost:9192
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -38,8 +40,22 @@ spring:
       auto-offset-reset: earliest
       properties:
         spring.json.trusted.packages: "ru.rodionov.payment.*"
-
   data:
     redis:
       host: localhost
       port: 6379
+  cache:
+    redis:
+      enable-statistics: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true

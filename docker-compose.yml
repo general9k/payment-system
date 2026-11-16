@@ -4,39 +4,40 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:7.6.0
-    container_name: kafka
+    container_name: kafka-payment-system
     ports:
-      - "9092:9092"
+      - "9192:9192"
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9192,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://localhost:9192
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
     healthcheck:
-      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:29092"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   redpanda-console:
     image: redpandadata/console:latest
-    container_name: redpanda-console
+    container_name: redpanda-console-payment-system
     ports:
       - "8081:8080"
     environment:
-      KAFKA_BROKERS: kafka:9092
+      KAFKA_BROKERS: kafka:29092
     depends_on:
       kafka:
         condition: service_healthy
 
   redis:
     image: redis:7.2-alpine
-    container_name: redis
+    container_name: redis-payment-system
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes
@@ -45,7 +46,7 @@ services:
 
   postgres-account:
     image: postgres:16.2-alpine
-    container_name: postgres-account
+    container_name: postgres-account-payment-system
     ports:
       - "5432:5432"
     environment:
@@ -57,7 +58,7 @@ services:
 
   postgres-payment:
     image: postgres:16.2-alpine
-    container_name: postgres-payment
+    container_name: postgres-payment-payment-system
     ports:
       - "5433:5432"
     environment:
@@ -69,7 +70,7 @@ services:
 
   postgres-notification:
     image: postgres:16.2-alpine
-    container_name: postgres-notification
+    container_name: postgres-notification-payment-system
     ports:
       - "5434:5432"
     environment:
@@ -79,6 +80,44 @@ services:
     volumes:
       - pg-notification-data:/var/lib/postgresql/data
 
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # нужно на Linux
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.62.0
+    container_name: redis-exporter
+    environment:
+      REDIS_ADDR: redis://redis:6379
+    ports:
+      - "9121:9121"
+
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:v1.8.0
+    container_name: kafka-exporter
+    command: [ "--kafka.server=kafka:29092" ]
+    ports:
+      - "9308:9308"
+    depends_on:
+      kafka:
+        condition: service_healthy
 volumes:
   redis-data:
   pg-account-data:

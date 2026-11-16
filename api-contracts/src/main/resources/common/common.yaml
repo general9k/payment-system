@@ -113,3 +113,43 @@ components:
         - CONFLICT
         - UNPROCESSABLE_ENTITY
         - INTERNAL_ERROR
+    PageInfo:
+      type: object
+      title: PageInfo
+      description: Описание объекта пагинирования
+      properties:
+        page:
+          type: integer
+        size:
+          type: integer
+        totalCount:
+          type: integer
+          format: int64
+  parameters:
+    size:
+      name: size
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 20
+      description: количество элементов в выборке
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      description: номер страницы запроса
+    sort:
+      name: sort[]
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Порядок сортировки

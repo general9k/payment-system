@@ -1,4 +1,4 @@
-package ru.rodionov.payment.converter;
+package ru.rodionov.payment.util.converter;
 
 import jakarta.persistence.Converter;
 import ru.rodionov.payment.contract.account.model.HoldStatusEnum;

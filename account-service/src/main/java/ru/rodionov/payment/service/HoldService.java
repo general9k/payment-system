@@ -1,115 +1,41 @@
 package ru.rodionov.payment.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.rodionov.payment.contract.account.model.AccountStatusEnum;
 import ru.rodionov.payment.contract.account.model.HoldStatusEnum;
-import ru.rodionov.payment.contract.account.model.OperationTypeEnum;
 import ru.rodionov.payment.contract.common.model.ErrorCode;
-import ru.rodionov.payment.entity.Account;
 import ru.rodionov.payment.entity.Hold;
-import ru.rodionov.payment.entity.TransactionLog;
-import ru.rodionov.starter.exception.LogicException;
-import ru.rodionov.payment.repository.AccountRepository;
 import ru.rodionov.payment.repository.HoldRepository;
-import ru.rodionov.payment.repository.TransactionLogRepository;
+import ru.rodionov.starter.exception.LogicBusinessException;
+import ru.rodionov.starter.service.BaseServiceImpl;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
-public class HoldService {
+public class HoldService extends BaseServiceImpl<Hold, UUID, HoldRepository> {
 
-    private final HoldRepository holdRepository;
-    private final AccountRepository accountRepository;
-    private final TransactionLogRepository transactionLogRepository;
-
-    @Transactional
-    public Hold createHold(UUID accountId, BigDecimal amount, UUID paymentId, int ttlSeconds) {
-        Account account = accountRepository.findByIdForUpdate(accountId)
-                .orElseThrow(() -> new LogicException("Аккаунт не найден по id = %s".formatted(accountId), ErrorCode.NOT_FOUND));
-
-        if (account.getStatus() != AccountStatusEnum.ACTIVE) {
-            throw new IllegalStateException("Счёт не активен");
-        }
-
-        BigDecimal available = getAvailableBalance(account);
-        if (available.compareTo(amount) < 0) {
-            throw new LogicException("", ErrorCode.INTERNAL_ERROR); // TODO
-//            throw new InsufficientFundsException(accountId, amount, available);
-        }
-
-        Hold hold = Hold.builder()
-                .accountId(accountId)
-                .amount(amount)
-                .paymentId(paymentId)
-                .expiresAt(OffsetDateTime.now().plusSeconds(ttlSeconds))
-                .build();
-
-        return holdRepository.save(hold);
+    public HoldService(final HoldRepository repository) {
+        super(repository);
     }
 
-    @Transactional
-    public Hold confirmHold(UUID holdId) {
-        Hold hold = holdRepository.findById(holdId)
-                .orElseThrow(() -> new IllegalArgumentException("Hold не найден: " + holdId));
+    public Hold getById(UUID id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new LogicBusinessException("Hold не найден: " + id, ErrorCode.NOT_FOUND));
+    }
 
-        if (hold.getStatus() != HoldStatusEnum.PENDING) {
-            throw new LogicException("", ErrorCode.INTERNAL_ERROR); // TODO
-//            throw new HoldConflictException(holdId, hold.getStatus().name());
+    public void checkIsPending(Hold hold) {
+        if (HoldStatusEnum.PENDING.equals(hold.getStatus())) {
+            throw new LogicBusinessException("Hold не в состоянии ожидания.", ErrorCode.INTERNAL_ERROR);
         }
-
-        Account account = accountRepository.findByIdForUpdate(hold.getAccountId())
-                .orElseThrow(() -> new LogicException("Аккаунт не найден по id = %s".formatted(hold.getAccountId()), ErrorCode.NOT_FOUND));
-
-        account.setBalance(account.getBalance().subtract(hold.getAmount()));
-        accountRepository.save(account);
-
-        hold.setStatus(HoldStatusEnum.CONFIRMED);
-        holdRepository.save(hold);
-
-        writeLog(account, OperationTypeEnum.DEBIT, hold.getAmount(), "Списание по hold " + holdId);
-
-        return hold;
     }
 
-    @Transactional
-    public Hold releaseHold(UUID holdId) {
-        Hold hold = holdRepository.findById(holdId)
-                .orElseThrow(() -> new IllegalArgumentException("Hold не найден: " + holdId));
-
-        if (hold.getStatus() != HoldStatusEnum.PENDING) {
-            throw new LogicException("", ErrorCode.INTERNAL_ERROR); // TODO
-//            throw new HoldConflictException(holdId, hold.getStatus().name());
-        }
-
-        hold.setStatus(HoldStatusEnum.RELEASED);
-        holdRepository.save(hold);
-
-        return hold;
+    public BigDecimal sumAmountByAccountIdAndStatus(UUID accountId, HoldStatusEnum status) {
+        return repository.sumAmountByAccountIdAndStatus(accountId, status);
     }
 
-    private BigDecimal getAvailableBalance(Account account) {
-        BigDecimal heldAmount = holdRepository
-                .findByAccountIdAndStatus(account.getId(), HoldStatusEnum.PENDING)
-                .stream()
-                .map(Hold::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        return account.getBalance().subtract(heldAmount);
-    }
-
-    private void writeLog(Account account, OperationTypeEnum operation, BigDecimal amount, String reason) {
-        TransactionLog log = TransactionLog.builder()
-                .accountId(account.getId())
-                .operationType(operation)
-                .amount(amount)
-                .balanceAfter(account.getBalance())
-                .reason(reason)
-                .build();
-        transactionLogRepository.save(log);
+    public List<Hold> findByStatusAndExpiresAtBefore(HoldStatusEnum status, OffsetDateTime now) {
+        return repository.findByStatusAndExpiresAtBefore(status, now);
     }
 }
